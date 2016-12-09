@@ -11,7 +11,7 @@ if __name__ == "__main__":
     from classification_model import *
     from sklearn.model_selection import train_test_split
 
-    verb = False
+    verb = True
     train = False
 
     if (train == True):
@@ -52,13 +52,15 @@ if __name__ == "__main__":
         print ('Classification accuracy = %f ' % accuracy)
         
     else:
-        unknown_file = './test/ExampleAbnormalCervix.tif'
+        #unknown_file = './test/ExampleAbnormalCervix.tif'
+        unknown_file = './TrainingData/healthy02.tif'
         rgb = read_tiff(filename= unknown_file)
         rgb = rgb_preprocess(rgb, verb=verb, exclude_bg=True, upper_lim=(0,  0,
                                                                          240))
         rh, gh, bh = rgb_histogram(rgb, verb=verb, omit=(0, 255))
 
         green_otsu = otsu_threshold(rgb[:, :, 1], verb=verb)
+        green_mode = calc_mode(gh)
         blue_mode = calc_mode(bh)
         blue_median = calc_median(bh)
         blue_variance = calc_variance(bh)
